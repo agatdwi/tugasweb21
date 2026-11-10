@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Vae — Crafting Digital Identity</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & Newsreader for editorial feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        canvas: '#F7F5F0',
+                        ink: '#1A1918',
+                        clay: '#C86D51',
+                        sand: '#EAE5DD',
+                        muted: '#76736D',
+                    },
+                    fontFamily: {
+                        serif: ['Newsreader', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F7F5F0;
+            color: #1A1918;
+            overflow-x: hidden;
+        }
+        .serif-font {
+            font-family: 'Newsreader', serif;
+        }
+        /* Custom smooth transition for image hover */
+        .project-img {
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .project-card:hover .project-img {
+            transform: scale(1.03);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F7F5F0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D5D0C5;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-clay selection:text-white">
+
+    <!-- Toast Notification (Replaces alert) -->
+    <div id="toast" class="fixed bottom-8 right-8 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-ink text-canvas px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 border border-sand/20">
+        <i data-lucide="check-circle-2" class="text-clay w-5 h-5"></i>
+        <span id="toast-message" class="text-sm font-medium">Pesan berhasil dikirim!</span>
+    </div>
+
+    <!-- Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-canvas/80 backdrop-blur-md border-b border-sand/60">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="text-2xl font-serif tracking-tight font-light italic flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-clay inline-block"></span>
+                Studio Vae
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-muted">
+                <a href="#works" class="hover:text-ink transition-colors">Karya</a>
+                <a href="#philosophy" class="hover:text-ink transition-colors">Filosofi</a>
+                <a href="#services" class="hover:text-ink transition-colors">Layanan</a>
+                <a href="#journal" class="hover:text-ink transition-colors">Jurnal</a>
+            </nav>
+
+            <div class="hidden md:flex items-center gap-4">
+                <button onclick="openContactModal()" class="bg-ink text-canvas px-5 py-2.5 rounded-full text-sm font-medium hover:bg-clay transition-all duration-300">
+                    Mulai Proyek
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button onclick="toggleMobileMenu()" class="md:hidden text-ink p-2">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="fixed inset-0 z-50 bg-canvas transform translate-x-full transition-transform duration-500 md:hidden flex flex-col p-8">
+        <div class="flex items-center justify-between mb-12">
+            <span class="text-2xl font-serif italic">Studio Vae</span>
+            <button onclick="toggleMobileMenu()" class="p-2">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <div class="flex flex-col gap-6 text-2xl font-serif">
+            <a href="#works" onclick="toggleMobileMenu()" class="hover:text-clay">Karya</a>
+            <a href="#philosophy" onclick="toggleMobileMenu()" class="hover:text-clay">Filosofi</a>
+            <a href="#services" onclick="toggleMobileMenu()" class="hover:text-clay">Layanan</a>
+            <a href="#journal" onclick="toggleMobileMenu()" class="hover:text-clay">Jurnal</a>
+        </div>
+        <div class="mt-auto">
+            <button onclick="toggleMobileMenu(); openContactModal();" class="w-full bg-ink text-canvas py-4 rounded-full text-base font-medium">
+                Mulai Proyek
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pt-36 pb-20 md:pt-48 md:pb-32 px-6 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+            <div class="lg:col-span-8">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sand text-xs font-semibold text-muted uppercase tracking-wider mb-6">
+                    Independent Design Studio &bull; Est. 2024
+                </div>
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-serif font-light leading-[1.1] tracking-tight">
+                    Mendesain pengalaman digital dengan <span class="italic text-clay">jiwa</span> dan presisi.
+                </h1>
+            </div>
+            <div class="lg:col-span-4 flex flex-col justify-end">
+                <p class="text-muted text-base leading-relaxed mb-6">
+                    Kami menolak template membosankan dan estetika pasaran. Setiap piksel dirancang khusus untuk membangun kedekatan emosional antara brand dan audiens Anda.
+                </p>
+                <div class="flex items-center gap-4 text-xs font-semibold tracking-wider text-ink uppercase">
+                    <span>Scroll to explore</span>
+                    <i data-lucide="arrow-down" class="w-4 h-4 animate-bounce text-clay"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero Featured Image -->
+        <div class="mt-16 rounded-3xl overflow-hidden shadow-xl h-[400px] sm:h-[550px] relative bg-sand">
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1600&auto=format&fit=crop" 
+                 onerror="this.src='https://placehold.co/1600x900/EAE5DD/1A1918?text=Studio+Vae'" 
+                 alt="Abstract Editorial Art" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent flex items-end p-8 sm:p-12">
+                <div class="text-white flex justify-between w-full items-end">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest opacity-80 mb-1">Feature Project</p>
+                        <h3 class="text-xl sm:text-2xl font-serif">Kromatisme Ruang & Waktu</h3>
+                    </div>
+                    <span class="hidden sm:inline-block text-sm bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full">Art Direction / Web</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Selected Works -->
+    <section id="works" class="py-24 px-6 max-w-7xl mx-auto border-t border-sand">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+            <div>
+                <span class="text-xs uppercase tracking-widest text-muted font-semibold block mb-3">Portfolio Terpilih</span>
+                <h2 class="text-3xl sm:text-5xl font-serif font-light">Karya & Kolaborasi</h2>
+            </div>
+            <div class="mt-6 md:mt-0 flex gap-2">
+                <button onclick="filterWorks('all')" class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-ink text-canvas transition-colors">Semua</button>
+                <button onclick="filterWorks('brand')" class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-sand text-muted hover:text-ink transition-colors">Branding</button>
+                <button onclick="filterWorks('digital')" class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-sand text-muted hover:text-ink transition-colors">Digital Web</button>
+            </div>
+        </div>
+
+        <!-- Grid of Works -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10" id="works-grid">
+            <!-- Project 1 -->
+            <div class="project-card group cursor-pointer" data-category="digital">
+                <div class="rounded-2xl overflow-hidden bg-sand aspect-[4/3] mb-4 relative">
+                    <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop" 
+                         onerror="this.src='https://placehold.co/800x600/EAE5DD/1A1918?text=Project+One'" 
+                         alt="Project One" class="project-img w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-canvas/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">2026</div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-serif group-hover:text-clay transition-colors">Lumina Architectural Archive</h3>
+                        <p class="text-sm text-muted mt-1">Immersive Web Experience & UI Architecture</p>
+                    </div>
+                    <span class="w-10 h-10 rounded-full border border-sand flex items-center justify-center group-hover:bg-ink group-hover:text-canvas group-hover:border-ink transition-all">
+                        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="project-card group cursor-pointer" data-category="brand">
+                <div class="rounded-2xl overflow-hidden bg-sand aspect-[4/3] mb-4 relative">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop" 
+                         onerror="this.src='https://placehold.co/800x600/EAE5DD/1A1918?text=Project+Two'" 
+                         alt="Project Two" class="project-img w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-canvas/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">2025</div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-serif group-hover:text-clay transition-colors">Verdant Organic Botanical</h3>
+                        <p class="text-sm text-muted mt-1">Brand Identity & Packaging System</p>
+                    </div>
+                    <span class="w-10 h-10 rounded-full border border-sand flex items-center justify-center group-hover:bg-ink group-hover:text-canvas group-hover:border-ink transition-all">
+                        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="project-card group cursor-pointer" data-category="digital">
+                <div class="rounded-2xl overflow-hidden bg-sand aspect-[4/3] mb-4 relative">
+                    <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=800&auto=format&fit=crop" 
+                         onerror="this.src='https://placehold.co/800x600/EAE5DD/1A1918?text=Project+Three'" 
+                         alt="Project Three" class="project-img w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-canvas/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">2025</div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-serif group-hover:text-clay transition-colors">Atelier Monolith</h3>
+                        <p class="text-sm text-muted mt-1">E-Commerce & Minimalist UI/UX</p>
+                    </div>
+                    <span class="w-10 h-10 rounded-full border border-sand flex items-center justify-center group-hover:bg-ink group-hover:text-canvas group-hover:border-ink transition-all">
+                        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Project 4 -->
+            <div class="project-card group cursor-pointer" data-category="brand">
+                <div class="rounded-2xl overflow-hidden bg-sand aspect-[4/3] mb-4 relative">
+                    <img src="https://images.unsplash.com/photo-1615529162924-f8605388461d?q=80&w=800&auto=format&fit=crop" 
+                         onerror="this.src='https://placehold.co/800x600/EAE5DD/1A1918?text=Project+Four'" 
+                         alt="Project Four" class="project-img w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-canvas/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">2026</div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-serif group-hover:text-clay transition-colors">Sonor Acoustic Laboratory</h3>
+                        <p class="text-sm text-muted mt-1">Direction & Visual Identity System</p>
+                    </div>
+                    <span class="w-10 h-10 rounded-full border border-sand flex items-center justify-center group-hover:bg-ink group-hover:text-canvas group-hover:border-ink transition-all">
+                        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section id="philosophy" class="py-24 bg-ink text-canvas my-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-5">
+                    <span class="text-xs uppercase tracking-widest text-clay font-semibold block mb-3">Manifesto Kami</span>
+                    <h2 class="text-3xl sm:text-5xl font-serif font-light leading-tight">
+                        Menghindari kebisingan digital melalui kesederhanaan bermakna.
+                    </h2>
+                </div>
+                <div class="lg:col-span-7 flex flex-col gap-6 text-muted text-base sm:text-lg leading-relaxed">
+                    <p class="text-canvas/90">
+                        Di era di mana perangkat lunak dan template AI membanjiri web dengan desain seragam, Studio Vae hadir sebagai antitesis. Kami percaya bahwa setiap brand memiliki ritme unik yang tidak dapat diselesaikan dengan rumus instan.
+                    </p>
+                    <p>
+                        Pendekatan kami memadukan prinsip arsitektur modern, tipografi kurasi tinggi, serta interaksi mikro yang natural untuk menciptakan kehadiran online yang berumur panjang.
+                    </p>
+                    <div class="grid grid-cols-2 gap-8 pt-6 border-t border-canvas/10 mt-4">
+                        <div>
+                            <h4 class="text-3xl font-serif text-canvas mb-1">98%</h4>
+                            <p class="text-xs text-muted">Klien melaporkan peningkatan engagement brand.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-3xl font-serif text-canvas mb-1">12+</h4>
+                            <p class="text-xs text-muted">Penghargaan desain internasional diraih.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="py-24 px-6 max-w-7xl mx-auto">
+        <div class="max-w-xl mb-16">
+            <span class="text-xs uppercase tracking-widest text-muted font-semibold block mb-3">Keahlian</span>
+            <h2 class="text-3xl sm:text-5xl font-serif font-light">Layanan yang Dirancang Khusus</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-sand/40 p-8 rounded-3xl border border-sand hover:border-clay/40 transition-all flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-full bg-sand flex items-center justify-center text-ink mb-6">
+                        <i data-lucide="layout" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-2xl font-serif mb-3">Digital Experience & Web</h3>
+                    <p class="text-muted text-sm leading-relaxed mb-6">
+                        Pengembangan website kustom dengan performa tinggi, animasi halus, dan pengalaman pengguna yang imersif tanpa batasan template generik.
+                    </p>
+                </div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-ink">Mulai dari $5,000</span>
+            </div>
+
+            <div class="bg-sand/40 p-8 rounded-3xl border border-sand hover:border-clay/40 transition-all flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-full bg-sand flex items-center justify-center text-ink mb-6">
+                        <i data-lucide="compass" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-2xl font-serif mb-3">Brand Strategy & Identity</h3>
+                    <p class="text-muted text-sm leading-relaxed mb-6">
+                        Penyusunan identitas visual komprehensif: dari palet warna emosional, sistem tipografi khusus, hingga panduan nada suara brand.
+                    </p>
+                </div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-ink">Mulai dari $3,500</span>
+            </div>
+
+            <div class="bg-sand/40 p-8 rounded-3xl border border-sand hover:border-clay/40 transition-all flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-full bg-sand flex items-center justify-center text-ink mb-6">
+                        <i data-lucide="feather" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-2xl font-serif mb-3">Art Direction & Content</h3>
+                    <p class="text-muted text-sm leading-relaxed mb-6">
+                        Pengarahan seni visual, fotografi konseptual, dan kurasi estetika untuk kampanye digital maupun cetak eksklusif.
+                    </p>
+                </div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-ink">Custom Scope</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Journal / Blog Section -->
+    <section id="journal" class="py-24 px-6 max-w-7xl mx-auto border-t border-sand">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+            <div>
+                <span class="text-xs uppercase tracking-widest text-muted font-semibold block mb-3">Pemikiran & Refleksi</span>
+                <h2 class="text-3xl sm:text-5xl font-serif font-light">Jurnal Terbaru</h2>
+            </div>
+            <a href="#" class="text-sm font-semibold tracking-wider uppercase mt-4 md:mt-0 flex items-center gap-2 hover:text-clay transition-colors">
+                Baca Semua Artikel <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <article class="group cursor-pointer">
+                <div class="rounded-2xl overflow-hidden aspect-[16/9] mb-6 bg-sand">
+                    <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800&auto=format&fit=crop" 
+                         onerror="this.src='https://placehold.co/800x450/EAE5DD/1A1918?text=Journal+1'" 
+                         alt="Journal Article" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="flex items-center gap-3 text-xs text-muted mb-2">
+                    <span>12 Mei 2026</span>
+                    <span>&bull;</span>
+                    <span>Desain & Psikologi</span>
+                </div>
+                <h3 class="text-2xl font-serif group-hover:text-clay transition-colors">Mengapa Desain yang Terlalu "Sempurna" Justru Kehilangan Jiwa</h3>
+            </article>
+
+            <article class="group cursor-pointer">
+                <div class="rounded-2xl overflow-hidden aspect-[16/9] mb-6 bg-sand">
+                    <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=800&auto=format&fit=crop" 
+                         onerror="this.src='https://placehold.co/800x450/EAE5DD/1A1918?text=Journal+2'" 
+                         alt="Journal Article" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="flex items-center gap-3 text-xs text-muted mb-2">
+                    <span>28 April 2026</span>
+                    <span>&bull;</span>
+                    <span>Teknologi Web</span>
+                </div>
+                <h3 class="text-2xl font-serif group-hover:text-clay transition-colors">Masa Depan Tipografi Responsif pada Perangkat Imersif</h3>
+            </article>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-ink text-canvas pt-20 pb-12 mt-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-canvas/10">
+                <div class="md:col-span-6">
+                    <h2 class="text-4xl sm:text-6xl font-serif font-light italic mb-6">Siap menciptakan sesuatu yang luar biasa?</h2>
+                    <button onclick="openContactModal()" class="bg-clay text-canvas px-8 py-4 rounded-full text-base font-medium hover:bg-canvas hover:text-ink transition-all duration-300">
+                        Mari Berdiskusi
+                    </button>
+                </div>
+                <div class="md:col-span-6 flex flex-col md:items-end justify-between">
+                    <div class="flex flex-col gap-3 text-right text-muted text-sm">
+                        <a href="mailto:hello@studiovae.com" class="hover:text-canvas transition-colors">hello@studiovae.com</a>
+                        <span>+62 21 555-0192</span>
+                        <span>Jakarta &bull; Bali</span>
+                    </div>
+                    <div class="flex gap-6 mt-8 md:mt-0 text-sm">
+                        <a href="#" class="hover:text-clay transition-colors">Instagram</a>
+                        <a href="#" class="hover:text-clay transition-colors">LinkedIn</a>
+                        <a href="#" class="hover:text-clay transition-colors">Behance</a>
+                        <a href="#" class="hover:text-clay transition-colors">Dribbble</a>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-muted">
+                <p>&copy; 2026 Studio Vae. All rights reserved.</p>
+                <div class="flex gap-6 mt-4 sm:mt-0">
+                    <a href="#" class="hover:text-canvas">Kebijakan Privasi</a>
+                    <a href="#" class="hover:text-canvas">Ketentuan Layanan</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="fixed inset-0 z-50 bg-ink/70 backdrop-blur-sm hidden items-center justify-center p-6">
+        <div class="bg-canvas w-full max-w-xl rounded-3xl p-8 sm:p-12 relative shadow-2xl border border-sand">
+            <button onclick="closeContactModal()" class="absolute top-6 right-6 p-2 text-muted hover:text-ink">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-3xl font-serif mb-2">Mulai Proyek Baru</h3>
+            <p class="text-muted text-sm mb-8">Ceritakan sedikit tentang visi atau kebutuhan brand Anda.</p>
+            
+            <form id="inquiry-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-muted font-semibold mb-2">Nama Lengkap</label>
+                    <input type="text" required class="w-full bg-sand/50 border border-sand rounded-xl px-4 py-3 text-ink focus:outline-none focus:border-clay transition-colors" placeholder="Cth. Dian Sastrowardoyo">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-muted font-semibold mb-2">Email Bisnis</label>
+                    <input type="email" required class="w-full bg-sand/50 border border-sand rounded-xl px-4 py-3 text-ink focus:outline-none focus:border-clay transition-colors" placeholder="dian@brandanda.com">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-muted font-semibold mb-2">Detail Kebutuhan / Proyek</label>
+                    <textarea rows="4" required class="w-full bg-sand/50 border border-sand rounded-xl px-4 py-3 text-ink focus:outline-none focus:border-clay transition-colors" placeholder="Ceritakan tujuan dan lini masa proyek..."></textarea>
+                </div>
+                <button type="submit" class="w-full bg-ink text-canvas py-4 rounded-xl font-medium hover:bg-clay transition-colors">
+                    Kirim Pesan
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Interactions -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('translate-x-full')) {
+                menu.classList.remove('translate-x-full');
+            } else {
+                menu.classList.add('translate-x-full');
+            }
+        }
+
+        // Contact Modal Logic
+        function openContactModal() {
+            const modal = document.getElementById('contact-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeContactModal() {
+            const modal = document.getElementById('contact-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        // Toast Notification Function
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.textContent = message;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 4000);
+        }
+
+        // Form Submit Handler
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            closeContactModal();
+            showToast('Pesan berhasil terkirim! Tim kami akan menghubungi Anda segera.');
+            document.getElementById('inquiry-form').reset();
+        }
+
+        // Filter Works Function
+        function filterWorks(category) {
+            const cards = document.querySelectorAll('.project-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-ink', 'text-canvas');
+                btn.classList.add('bg-sand', 'text-muted');
+            });
+            event.target.classList.remove('bg-sand', 'text-muted');
+            event.target.classList.add('bg-ink', 'text-canvas');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
